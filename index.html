@@ -15,6 +15,20 @@
 
     <link rel="stylesheet" href="style.css" />
 
+    <!--    https://leafletjs.com/index.html-->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"
+      integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14="
+      crossorigin=""
+    />
+    <script
+      defer
+      src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js"
+      integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg="
+      crossorigin=""
+    ></script>
+
     <script defer src="script.js"></script>
     <title>Кардио - Карта Твоих Тренировок</title>
   </head>
@@ -37,24 +51,15 @@
           </div>
           <div class="form__row">
             <label class="form__label">Длительность</label>
-            <input
-              class="form__input form__input--duration"
-              placeholder="мин"
-            />
+            <input class="form__input form__input--duration" placeholder="мин" />
           </div>
           <div class="form__row">
             <label class="form__label">Темп</label>
-            <input
-              class="form__input form__input--temp"
-              placeholder="шаг/мин"
-            />
+            <input class="form__input form__input--temp" placeholder="шаг/мин" />
           </div>
           <div class="form__row form__row--hidden">
             <label class="form__label">Подъём</label>
-            <input
-              class="form__input form__input--climb"
-              placeholder="метров"
-            />
+            <input class="form__input form__input--climb" placeholder="метров" />
           </div>
           <button class="form__btn">OK</button>
         </form>
@@ -108,9 +113,7 @@
         </li> -->
       </ul>
 
-      <p class="footer__copyright">
-        НЕ ТЕРЯЙ ВРЕМЯ И СТРОЙ СВОЕ БУДУЩЕЕ СЕЙЧАС
-      </p>
+      <p class="footer__copyright">НЕ ТЕРЯЙ ВРЕМЯ И СТРОЙ СВОЕ БУДУЩЕЕ СЕЙЧАС</p>
       <p class="footer__copyright">
         &copy;
         <a
