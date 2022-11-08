@@ -20,6 +20,8 @@ class Workout {
 }
 
 class Running extends Workout {
+  type = 'running';
+
   constructor(coords, distance, duration, temp) {
     super(coords, distance, duration);
     this.temp = temp;
@@ -32,6 +34,8 @@ class Running extends Workout {
   }
 }
 class Cycling extends Workout {
+  type = 'cycling';
+
   constructor(coords, distance, duration, climb) {
     super(coords, distance, duration);
     this.climb = climb;
@@ -52,6 +56,7 @@ class Cycling extends Workout {
 class App {
   #map;
   #mapEvent;
+  #workout = [];
 
   constructor() {
     this._getPosition();
@@ -103,15 +108,60 @@ class App {
     inputTemp.closest('.form__row').classList.toggle('form__row--hidden');
   }
   _newWorkout(e) {
+    const areNumbers = (...numbers) => {
+      return numbers.every(num => Number.isFinite(num));
+    };
+
+    const areNumbersPositive = (...numbers) => {
+      return numbers.every(num => num > 0);
+    };
+
     e.preventDefault();
 
-    // Очистка полей ввода данных формы
-    inputDistance.value = inputDuration.value = inputTemp.value = inputClimb.value = '';
-
-    // Отображение маркера
-    // console.log(this.#mapEvent);
     const { lat, lng } = this.#mapEvent.latlng;
-    L.marker([lat, lng])
+    let workout;
+
+    // Получить данные из формы
+    const type = inputType.value;
+    const distance = +inputDistance.value;
+    const duration = +inputDuration.value;
+
+    // Если тренировка является пробежкой, создать объект Running
+    if (type === 'running') {
+      const temp = +inputTemp.value;
+      // Проверка валидности данных
+      // if (!Number.isFinite(distance) || !Number.isFinite(duration) || !Number.isFinite(temp)) {
+      if (!areNumbers(distance, duration, temp) || !areNumbersPositive(distance, duration, temp)) {
+        return alert('Введите положительное число!');
+      }
+      workout = new Running([lat, lng], distance, duration, temp);
+    }
+
+    // Если тренировка является велотренировкой, создать объект Cycling
+    if (type === 'cycling') {
+      const climb = +inputClimb.value;
+      // Проверка валидности данных
+      // if (!Number.isFinite(distance) || !Number.isFinite(duration) || !Number.isFinite(climb)) {
+      if (!areNumbers(distance, duration, climb) || !areNumbersPositive(distance, duration)) {
+        return alert('Введите положительное число!');
+      }
+      workout = new Cycling([lat, lng], distance, duration, climb);
+    }
+
+    // Добавить новый объект в массив тренировок
+    this.#workout.push(workout);
+
+    // Отобразить тренировку на карте
+    this.displayWorkout(workout);
+
+    // Отобразить тренировку в списке
+
+    // Спрятать форму и очистить поля ввода данных
+    inputDistance.value = inputDuration.value = inputTemp.value = inputClimb.value = '';
+  }
+
+  displayWorkout(workout) {
+    L.marker(workout.coords)
       .addTo(this.#map)
       .bindPopup(
         L.popup({
@@ -119,7 +169,7 @@ class App {
           minWidth: 100,
           autoClose: false,
           closeOnClick: false,
-          className: 'running-popup',
+          className: `${workout.type}-popup`,
         }),
       )
       .setPopupContent('Тренировка')
